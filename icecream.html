@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.axis path,
+.axis line {
+	display: none;
+}
+
+text {
+  font: 13px 'gotham rounded';
+	fill: #2B508B;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="mapfn.js"></script>
+<script>
+var ice_cream = function( ){
+	var keys = ['strawberry ice cream','vanilla ice cream','chocolate ice cream']
+	var color =
+			d3.scale.ordinal( )
+				.range(["#edabad ","#FFFAE6","#402817"]) //#ffc0cb
+				.domain(['strawberry ice cream','vanilla ice cream','chocolate ice cream'])
+	var source = 'https://books.google.com/ngrams/graph?content=strawberry+ice+cream%2Cvanilla+ice+cream%2Cchocolate+ice+cream&case_insensitive=on&year_start=1900&year_end=2008&corpus=17&smoothing=3&share=&direct_url=t4%3B%2Cstrawberry%20ice%20cream%3B%2Cc0%3B%2Cs0%3B%3Bstrawberry%20ice%20cream%3B%2Cc0%3B%3BStrawberry%20Ice%20Cream%3B%2Cc0%3B%3BStrawberry%20ice%20cream%3B%2Cc0%3B%3BSTRAWBERRY%20ICE%20CREAM%3B%2Cc0%3B.t4%3B%2Cvanilla%20ice%20cream%3B%2Cc0%3B%2Cs0%3B%3Bvanilla%20ice%20cream%3B%2Cc0%3B%3BVanilla%20Ice%20Cream%3B%2Cc0%3B%3BVanilla%20ice%20cream%3B%2Cc0%3B%3BVANILLA%20ICE%20CREAM%3B%2Cc0%3B.t4%3B%2Cchocolate%20ice%20cream%3B%2Cc0%3B%2Cs0%3B%3Bchocolate%20ice%20cream%3B%2Cc0%3B%3BChocolate%20Ice%20Cream%3B%2Cc0%3B%3BChocolate%20ice%20cream%3B%2Cc0%3B%3BCHOCOLATE%20ICE%20CREAM%3B%2Cc0'
+
+	d3.csv('icecream_data.csv', function(data) {
+		mapfn(data,'icecream',color,keys);
+	}) 
+}( );
+</script>
