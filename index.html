@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+	margin-left: 30px;
+	margin-top: 30px;
+}
+
+.axis path,
+.axis line {
+	display: none;
+}
+
+text {
+  font: 13px 'gotham rounded';
+	fill: #2B508B;
+}
+
+h1,h2 {
+	font: 60px 'mrseavesroman';
+	//font: 60px 'bauer bodoni d';
+	color: #2b508b;
+}
+
+h1 {
+	margin-bottom: 10px;
+}
+
+h2 {
+	margin-top: 0px;
+	font-size: 32px;
+}
+
+</style>
+<body> 
+<h1>Food Trends in American Writing</h1>
+<h2>Based on Term Frequency in the Google Books Ngram Corpus</h2> 
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+var width = 900,
+		legend_width = 200,
+    height = 500,
+		margin = 60;
+
+var dict = {
+	'icecream': {
+		fname: 'icecream_data.csv',
+		keys: ['strawberry ice cream','vanilla ice cream','chocolate ice cream'],
+		color: 
+			d3.scale.ordinal( )
+				.range(["#edabad ","#FFFAE6","#402817"]) //#ffc0cb
+				.domain(['strawberry ice cream','vanilla ice cream','chocolate ice cream']),
+		source: 'https://books.google.com/ngrams/graph?content=strawberry+ice+cream%2Cvanilla+ice+cream%2Cchocolate+ice+cream&case_insensitive=on&year_start=1900&year_end=2008&corpus=17&smoothing=3&share=&direct_url=t4%3B%2Cstrawberry%20ice%20cream%3B%2Cc0%3B%2Cs0%3B%3Bstrawberry%20ice%20cream%3B%2Cc0%3B%3BStrawberry%20Ice%20Cream%3B%2Cc0%3B%3BStrawberry%20ice%20cream%3B%2Cc0%3B%3BSTRAWBERRY%20ICE%20CREAM%3B%2Cc0%3B.t4%3B%2Cvanilla%20ice%20cream%3B%2Cc0%3B%2Cs0%3B%3Bvanilla%20ice%20cream%3B%2Cc0%3B%3BVanilla%20Ice%20Cream%3B%2Cc0%3B%3BVanilla%20ice%20cream%3B%2Cc0%3B%3BVANILLA%20ICE%20CREAM%3B%2Cc0%3B.t4%3B%2Cchocolate%20ice%20cream%3B%2Cc0%3B%2Cs0%3B%3Bchocolate%20ice%20cream%3B%2Cc0%3B%3BChocolate%20Ice%20Cream%3B%2Cc0%3B%3BChocolate%20ice%20cream%3B%2Cc0%3B%3BCHOCOLATE%20ICE%20CREAM%3B%2Cc0'
+	},
+	'dressing': {
+		fname: 'dressing_data.csv',
+		keys: ['russian dressing',
+								 'blue cheese dressing',
+								 'honey mustard',
+								 'ranch dressing',								 
+								 'italian dressing'],
+		color: 
+			d3.scale.ordinal()
+				.range(["#fdb793","#c6d4b9","#dec36c","#ebede0","#e0b493"]) //#c6d4b9
+				.domain(['russian dressing',
+								 'blue cheese dressing',
+								 'honey mustard',
+								 'ranch dressing',								 
+								 'italian dressing']),
+		source: 'https://books.google.com/ngrams/graph?content=russian+dressing%2Cblue+cheese+dressing%2Cranch+dressing%2Choney+mustard%2Citalian+dressing&case_insensitive=on&year_start=1940&year_end=2008&corpus=17&smoothing=3&share=&direct_url=t4%3B%2Crussian%20dressing%3B%2Cc0%3B%2Cs0%3B%3BRussian%20dressing%3B%2Cc0%3B%3BRussian%20Dressing%3B%2Cc0%3B%3BRUSSIAN%20DRESSING%3B%2Cc0%3B%3Brussian%20dressing%3B%2Cc0%3B.t4%3B%2Cblue%20cheese%20dressing%3B%2Cc0%3B%2Cs0%3B%3Bblue%20cheese%20dressing%3B%2Cc0%3B%3BBlue%20Cheese%20Dressing%3B%2Cc0%3B%3BBLUE%20CHEESE%20DRESSING%3B%2Cc0%3B%3BBlue%20cheese%20dressing%3B%2Cc0%3B%3BBlue%20Cheese%20dressing%3B%2Cc0%3B.t4%3B%2Cranch%20dressing%3B%2Cc0%3B%2Cs0%3B%3Branch%20dressing%3B%2Cc0%3B%3BRanch%20Dressing%3B%2Cc0%3B%3BRanch%20dressing%3B%2Cc0%3B%3BRANCH%20DRESSING%3B%2Cc0%3B.t4%3B%2Choney%20mustard%3B%2Cc0%3B%2Cs0%3B%3Bhoney%20mustard%3B%2Cc0%3B%3BHoney%20Mustard%3B%2Cc0%3B%3BHONEY%20MUSTARD%3B%2Cc0%3B%3BHoney%20mustard%3B%2Cc0%3B.t4%3B%2Citalian%20dressing%3B%2Cc0%3B%2Cs0%3B%3BItalian%20dressing%3B%2Cc0%3B%3BItalian%20Dressing%3B%2Cc0%3B%3BITALIAN%20DRESSING%3B%2Cc0'
+	},
+	'apples': {
+		fname: 'apple_data.csv',
+		keys: ['red delicious','braeburn','golden delicious','granny smith'],
+		color: d3.scale.ordinal()
+			.range(['#cc6159','#e9a069','#fcef96','#a7c981'])
+			.domain(['red delicious','braeburn','golden delicious','granny smith']),
+		source: 'https://books.google.com/ngrams/graph?content=red+delicious%2Cgranny+smith%2Cbraeburn%2Cgolden+delicious&case_insensitive=on&year_start=1900&year_end=2008&corpus=17&smoothing=3&share=&direct_url=t4%3B%2Cred%20delicious%3B%2Cc0%3B%2Cs0%3B%3BRed%20Delicious%3B%2Cc0%3B%3Bred%20delicious%3B%2Cc0%3B%3Bred%20Delicious%3B%2Cc0%3B%3BRED%20DELICIOUS%3B%2Cc0%3B.t4%3B%2Cgranny%20smith%3B%2Cc0%3B%2Cs0%3B%3BGranny%20Smith%3B%2Cc0%3B%3BGRANNY%20SMITH%3B%2Cc0%3B%3Bgranny%20smith%3B%2Cc0%3B.t4%3B%2Cbraeburn%3B%2Cc0%3B%2Cs0%3B%3BBraeburn%3B%2Cc0%3B%3BBRAEBURN%3B%2Cc0%3B.t4%3B%2Cgolden%20delicious%3B%2Cc0%3B%2Cs0%3B%3BGolden%20Delicious%3B%2Cc0%3B%3Bgolden%20delicious%3B%2Cc0%3B%3BGOLDEN%20DELICIOUS%3B%2Cc0'
+	},
+	'espresso': {
+		fname: 'espresso_data.csv',
+		keys: ['espresso','cappuccino','latte'],
+		color: d3.scale.ordinal()
+			.range(['#291514','#cf922f','#f5dbbe'])
+			.domain(['espresso','cappuccino','latte']),
+		source: 'https://books.google.com/ngrams/graph?content=cappuccino%2Cespresso%2Clatte&case_insensitive=on&year_start=1920&year_end=2008&corpus=17&smoothing=3&share=&direct_url=t4%3B%2Ccappuccino%3B%2Cc0%3B%2Cs0%3B%3Bcappuccino%3B%2Cc0%3B%3BCappuccino%3B%2Cc0%3B%3BCAPPUCCINO%3B%2Cc0%3B.t4%3B%2Cespresso%3B%2Cc0%3B%2Cs0%3B%3Bespresso%3B%2Cc0%3B%3BEspresso%3B%2Cc0%3B%3BESPRESSO%3B%2Cc0%3B.t4%3B%2Clatte%3B%2Cc0%3B%2Cs0%3B%3Blatte%3B%2Cc0%3B%3BLatte%3B%2Cc0%3B%3BLATTE%3B%2Cc0'
+	},
+	'bread': {
+		fname: 'bread_data.csv',
+		//keys: ['corn bread','rye bread','pumpernickel','pita bread','white bread','tortilla','sourdough'],
+		keys: ['white bread','rye bread','sourdough','pumpernickel','tortilla'],
+		color: d3.scale.ordinal( )
+	.range(['#ecddbe','#a38b5b','#e7ded9','#220001','#ead795'])
+	.domain(['white bread','rye bread','sourdough','pumpernickel','tortilla']),							
+		source: 'https://books.google.com/ngrams/graph?content=rye+bread%2Cpumpernickel%2Cwhite+bread%2Ctortilla%2Csourdough&year_start=1800&year_end=2000&corpus=17&smoothing=3&share=&direct_url=t1%3B%2Crye%20bread%3B%2Cc0%3B.t1%3B%2Cpumpernickel%3B%2Cc0%3B.t1%3B%2Cwhite%20bread%3B%2Cc0%3B.t1%3B%2Ctortilla%3B%2Cc0%3B.t1%3B%2Csourdough%3B%2Cc0'
+	}/*,
+	'juice': {
+		fname: 'juice_data.csv',
+		keys: ['orange juice','grapefruit juice','cranberry juice','grape juice','apple juice','vegetable juice'],
+		color: d3.scale.ordinal( )
+			.range(['#ffbf24','#f7a08c','#c0394a','#432d30','#f7e486','#94a056'])
+			.domain(['orange juice','grapefruit juice','cranberry juice','grape juice','apple juice','vegetable juice']),
+		source: 'https://books.google.com/ngrams/graph?content=orange+juice%2Ccranberry+juice%2Capple+juice%2Cgrape+juice%2Cgrapefruit+juice%2Cpineapple+juice&case_insensitive=on&year_start=1900&year_end=2008&corpus=17&smoothing=3&share=&direct_url=t4%3B%2Corange%20juice%3B%2Cc0%3B%2Cs0%3B%3Borange%20juice%3B%2Cc0%3B%3BOrange%20juice%3B%2Cc0%3B%3BOrange%20Juice%3B%2Cc0%3B.t4%3B%2Ccranberry%20juice%3B%2Cc0%3B%2Cs0%3B%3Bcranberry%20juice%3B%2Cc0%3B%3BCranberry%20juice%3B%2Cc0%3B%3BCranberry%20Juice%3B%2Cc0%3B%3BCRANBERRY%20JUICE%3B%2Cc0%3B.t4%3B%2Capple%20juice%3B%2Cc0%3B%2Cs0%3B%3Bapple%20juice%3B%2Cc0%3B%3BApple%20juice%3B%2Cc0%3B%3BApple%20Juice%3B%2Cc0%3B%3BAPPLE%20JUICE%3B%2Cc0%3B.t4%3B%2Cgrape%20juice%3B%2Cc0%3B%2Cs0%3B%3Bgrape%20juice%3B%2Cc0%3B%3BGrape%20Juice%3B%2Cc0%3B%3BGrape%20juice%3B%2Cc0%3B%3BGRAPE%20JUICE%3B%2Cc0%3B.t4%3B%2Cgrapefruit%20juice%3B%2Cc0%3B%2Cs0%3B%3Bgrapefruit%20juice%3B%2Cc0%3B%3BGrapefruit%20juice%3B%2Cc0%3B%3BGrapefruit%20Juice%3B%2Cc0%3B%3BGRAPEFRUIT%20JUICE%3B%2Cc0%3B%3Bgrapefruit%20Juice%3B%2Cc0%3B.t4%3B%2Cpineapple%20juice%3B%2Cc0%3B%2Cs0%3B%3Bpineapple%20juice%3B%2Cc0%3B%3BPineapple%20juice%3B%2Cc0%3B%3BPineapple%20Juice%3B%2Cc0%3B%3BPINEAPPLE%20JUICE%3B%2Cc0'
+	}
+	*/
+};
+
+var x = d3.time.scale( )
+	.range([0,width]);
+
+var y = d3.scale.linear( )
+	.range([height,0]);
+
+var parseDate = d3.time.format("%Y").parse,
+    formatPercent = d3.format(".0%");	
+
+var xAxis = d3.svg.axis( )
+	.scale(x)
+	.orient("bottom");
+
+var svg = d3.select("body")
+	.append("svg")
+	.attr("width", width+legend_width)
+	.attr("height", Object.keys(dict).length*(height+margin));
+
+var stack = d3.layout.stack( )
+		.offset('zero')
+		.values(function(d) { return d.values; });	
+
+var area = d3.svg.area()
+		.interpolate('basis')
+    .x(function(d) { return x(d.x); })
+    .y0(function(d) { return y(d.y0); })
+    .y1(function(d) { return y(d.y0 + d.y); });
+
+var mapfn = function(data,group,position) {
+	data.forEach(function(d) {
+		d.year = parseDate(d.year);
+	});
+
+	var color = dict[group].color;
+	var source = dict[group].source;
+	var keys = dict[group].keys;
+
+	var graph = svg.append('g')
+			 .attr('class',group)
+			 .attr('transform','translate(0,' + (position*(height+margin)) + ')');
+
+	var stackfn = function(f) { 
+		return data.map(function(d) {
+			return {x: d.year, y: +d[f]}; 
+		});
+	};
+	var flavors = keys.map(function(f) {
+		return { flavor: f, values: stackfn(f) };
+	});
+	flavors = stack(flavors); 
+
+	x.domain(d3.extent(data, function(d) { return d.year; }));
+	var max_height = d3.max(flavors[flavors.length-1].values.map(function(c){return c.y+c.y0;}));
+	y.domain([0,max_height]);	
+
+	xAxis.ticks(d3.time.years,10);
+
+	graph.selectAll("path")
+    .data(flavors)
+  .enter().append("path")
+    .attr("d", function(d) { return area(d.values); })
+    .style("fill", function(d) { return color(d.flavor); });
+
+	graph.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + (height+4) + ")")
+      .call(xAxis)
+			.selectAll("text")
+			.attr("transform","translate(16,0)");
+
+	var legend = graph.selectAll(".legend")
+      .data(color.domain( ))
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { 
+				return "translate(" + (width+12) + "," + (height-40*(i+1)) + ")"; 
+			});
+
+  legend.append("rect")
+      .attr("width", 40)
+      .attr("height", 40)
+      .style("fill", function(d) { return color(d);});
+
+  legend.append("text")
+      .attr("dy", ".35em")
+			.attr("transform","translate(48,32)")
+      .style("text-anchor", "beginning")
+      .text(function(d) { return d; });
+
+	var link = graph.append('a')
+		.attr('xlink:href',source)
+		.append('text')
+		.attr('y',height + 45)
+		.style('text-anchor','beginning')
+		.text('source');
+};
+
+var idx = -1;
+['icecream','apples','dressing','espresso','bread','juice'].forEach(function(name) {
+	closure = function(n) {
+		d3.csv(dict[n].fname,function(data) {
+			mapfn(data,n,idx+=1);
+		});
+	}(name);
+});
+</script>
