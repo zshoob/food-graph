@@ -12,18 +12,17 @@ body {
 	display: none;
 }
 
-text {
-  font: 13px 'gotham rounded';
-	fill: #2B508B;
-}
-
 @font-face {
 	font-family: "quicksand";
 	src: url("quicksand/Quicksand-Regular.otf");
 }
 
+text {
+  font: 14px "quicksand";
+	fill: #2B508B;
+}
+
 h1,h2 {
-	//font: 60px 'mrseavesroman';
 	font: 55px "quicksand";
 	color: #2b508b;
 }
@@ -98,16 +97,7 @@ var dict = {
 	.range(['#ecddbe','#a38b5b','#e7ded9','#220001','#ead795'])
 	.domain(['white bread','rye bread','sourdough','pumpernickel','tortilla']),							
 		source: 'https://books.google.com/ngrams/graph?content=rye+bread%2Cpumpernickel%2Cwhite+bread%2Ctortilla%2Csourdough&year_start=1800&year_end=2000&corpus=17&smoothing=3&share=&direct_url=t1%3B%2Crye%20bread%3B%2Cc0%3B.t1%3B%2Cpumpernickel%3B%2Cc0%3B.t1%3B%2Cwhite%20bread%3B%2Cc0%3B.t1%3B%2Ctortilla%3B%2Cc0%3B.t1%3B%2Csourdough%3B%2Cc0'
-	}/*,
-	'juice': {
-		fname: 'juice_data.csv',
-		keys: ['orange juice','grapefruit juice','cranberry juice','grape juice','apple juice','vegetable juice'],
-		color: d3.scale.ordinal( )
-			.range(['#ffbf24','#f7a08c','#c0394a','#432d30','#f7e486','#94a056'])
-			.domain(['orange juice','grapefruit juice','cranberry juice','grape juice','apple juice','vegetable juice']),
-		source: 'https://books.google.com/ngrams/graph?content=orange+juice%2Ccranberry+juice%2Capple+juice%2Cgrape+juice%2Cgrapefruit+juice%2Cpineapple+juice&case_insensitive=on&year_start=1900&year_end=2008&corpus=17&smoothing=3&share=&direct_url=t4%3B%2Corange%20juice%3B%2Cc0%3B%2Cs0%3B%3Borange%20juice%3B%2Cc0%3B%3BOrange%20juice%3B%2Cc0%3B%3BOrange%20Juice%3B%2Cc0%3B.t4%3B%2Ccranberry%20juice%3B%2Cc0%3B%2Cs0%3B%3Bcranberry%20juice%3B%2Cc0%3B%3BCranberry%20juice%3B%2Cc0%3B%3BCranberry%20Juice%3B%2Cc0%3B%3BCRANBERRY%20JUICE%3B%2Cc0%3B.t4%3B%2Capple%20juice%3B%2Cc0%3B%2Cs0%3B%3Bapple%20juice%3B%2Cc0%3B%3BApple%20juice%3B%2Cc0%3B%3BApple%20Juice%3B%2Cc0%3B%3BAPPLE%20JUICE%3B%2Cc0%3B.t4%3B%2Cgrape%20juice%3B%2Cc0%3B%2Cs0%3B%3Bgrape%20juice%3B%2Cc0%3B%3BGrape%20Juice%3B%2Cc0%3B%3BGrape%20juice%3B%2Cc0%3B%3BGRAPE%20JUICE%3B%2Cc0%3B.t4%3B%2Cgrapefruit%20juice%3B%2Cc0%3B%2Cs0%3B%3Bgrapefruit%20juice%3B%2Cc0%3B%3BGrapefruit%20juice%3B%2Cc0%3B%3BGrapefruit%20Juice%3B%2Cc0%3B%3BGRAPEFRUIT%20JUICE%3B%2Cc0%3B%3Bgrapefruit%20Juice%3B%2Cc0%3B.t4%3B%2Cpineapple%20juice%3B%2Cc0%3B%2Cs0%3B%3Bpineapple%20juice%3B%2Cc0%3B%3BPineapple%20juice%3B%2Cc0%3B%3BPineapple%20Juice%3B%2Cc0%3B%3BPINEAPPLE%20JUICE%3B%2Cc0'
 	}
-	*/
 };
 
 var x = d3.time.scale( )
